@@ -4,7 +4,7 @@ def visible_trees_count
 
   visible_count = 0
   forest.each_with_index do |row, r|
-    row.each_with_index.count do |_tree, c|
+    row.each_with_index do |_tree, c|
       visible_count += 1 if visible?(r, c, forest, trans_forest)
     end
   end

@@ -4,7 +4,7 @@ def max_scenic_score
 
   max_scenic_score = 0
   forest.each_with_index do |row, r|
-    row.each_with_index.count do |_tree, c|
+    row.each_with_index do |_tree, c|
       max_scenic_score = [max_scenic_score, scenic_score(r, c, forest, trans_forest)].max
     end
   end
