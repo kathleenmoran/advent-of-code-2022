@@ -26,11 +26,6 @@ def add_file(line, dir = @dir_stack.last)
   add_file(line, parent(dir)) unless dir.empty? || dir == '/'
 end
 
-def start_with_int?(line)
-  first = line.split.first
-  first.to_i.to_s == first
-end
-
 def parent(dir)
   path = dir.split('/')
   path.pop
@@ -44,7 +39,7 @@ def parse_terminal_output
   terminal_output.readlines.each do |line|
     if line.start_with?('$ cd')
       change_dir(line)
-    elsif start_with_int?(line)
+    elsif /\d+/.match?(line)
       add_file(line)
     end
   end
