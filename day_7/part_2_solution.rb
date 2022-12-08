@@ -6,31 +6,14 @@ def change_dir(line)
   if destination == '..'
     @dir_stack.pop
   else
-    @dir_stack.push(file_path(destination))
-  end
-end
-
-def file_path(destination)
-  if @dir_stack.last.nil?
-    destination
-  elsif @dir_stack.last == '/'
-    "/#{destination}"
-  else
-    "#{@dir_stack.last}/#{destination}"
+    @dir_stack.push((@dir_stack.last || []) + [destination])
   end
 end
 
 def add_file(line, dir = @dir_stack.last)
   file_size = line.split.first.to_i
   @size[dir] += file_size
-  add_file(line, parent(dir)) unless dir.empty? || dir == '/'
-end
-
-def parent(dir)
-  path = dir.split('/')
-  path.pop
-  parent = path.join('/')
-  parent.empty? ? '/' : parent
+  add_file(line, dir[0..-2]) if dir.length > 1
 end
 
 def parse_terminal_output
@@ -47,7 +30,7 @@ end
 
 def deleted_directories_total_size
   parse_terminal_output
-  @size.values.sort.find { |file_size| 70_000_000 - @size['/'] + file_size >= 30_000_000 }
+  @size.values.sort.find { |file_size| 70_000_000 - @size[['/']] + file_size >= 30_000_000 }
 end
 
 puts "Total size of deleted directory: #{deleted_directories_total_size}"
