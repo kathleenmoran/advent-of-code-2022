@@ -1,4 +1,3 @@
-@children = Hash.new([])
 @size = Hash.new(0)
 @dir_stack = []
 
@@ -19,10 +18,6 @@ def file_path(destination)
   else
     "#{@dir_stack.last}/#{destination}"
   end
-end
-
-def add_dir(line)
-  @children[@dir_stack.last] += [file_path(line.split.last)]
 end
 
 def add_file(line, dir = @dir_stack.last)
@@ -49,8 +44,6 @@ def parse_terminal_output
   terminal_output.readlines.each do |line|
     if line.start_with?('$ cd')
       change_dir(line)
-    elsif line.start_with?('dir')
-      add_dir(line)
     elsif start_with_int?(line)
       add_file(line)
     end
